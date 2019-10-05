@@ -1,6 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+const Header = ({ course }) => <h1>{course}</h1>;
+
+const Content = ({ parts }) => {
+  return (
+    <div>
+      {parts.map(({ name, exercises }, idx) => (
+        <Part name={name} exercises={exercises} key={idx} />
+      ))}
+    </div>
+  );
+};
+
+const Part = ({ name, exercises }) => (
+  <p>
+    {name} {exercises}
+  </p>
+);
+
+const Total = ({ parts }) => {
+  let sumExercises =
+    parts[0].exercises + parts[1].exercises + parts[2].exercises;
+  return <p>Number of exercises {sumExercises}</p>;
+};
+
 const App = () => {
   const course = {
     name: "Half Stack application development",
@@ -18,30 +42,6 @@ const App = () => {
         exercises: 14
       }
     ]
-  };
-
-  const Header = ({ course }) => <h1>{course}</h1>;
-
-  const Content = ({ parts }) => {
-    return (
-      <div>
-        {parts.map(({ name, exercises }, idx) => (
-          <Part name={name} exercises={exercises} key={idx} />
-        ))}
-      </div>
-    );
-  };
-
-  const Part = ({ name, exercises }) => (
-    <p>
-      {name} {exercises}
-    </p>
-  );
-
-  const Total = ({ parts }) => {
-    let sumExercises =
-      parts[0].exercises + parts[1].exercises + parts[2].exercises;
-    return <p>Number of exercises {sumExercises}</p>;
   };
 
   return (
