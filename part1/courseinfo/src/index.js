@@ -25,8 +25,8 @@ const App = () => {
   const Content = ({ parts }) => {
     return (
       <div>
-        {parts.map(({ name, exercises }) => (
-          <Part name={name} exercises={exercises} />
+        {parts.map(({ name, exercises }, idx) => (
+          <Part name={name} exercises={exercises} key={idx} />
         ))}
       </div>
     );
