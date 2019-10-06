@@ -1,31 +1,49 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+const Anecdote = ({ anecdote, votes }) => {
+  return (
+    <div className="Anectdote">
+      <div>{anecdote}</div>
+      <div>has {votes} votes</div>
+    </div>
+  );
+};
+
+const Button = ({ handleClick, text }) => {
+  return <button onClick={handleClick}>{text}</button>;
+};
+
 const App = ({ anecdotes }) => {
   const emptyVotes = new Array(anecdotes.length).fill(0);
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(emptyVotes);
 
   const vote = selected => {
-    return () => {
-      const newVotes = [...votes];
-      newVotes[selected] += 1;
-      setVotes(newVotes);
-    };
+    const newVotes = [...votes];
+    newVotes[selected] += 1;
+    setVotes(newVotes);
   };
+
+  //  taken from here: https://stackoverflow.com/a/51523641
+  const indexOfMaxValue = votes.indexOf(Math.max(...votes));
 
   return (
     <div>
-      <div>{anecdotes[selected]}</div>
-      <button onClick={vote(selected)}>vote</button>
-      <button
-        onClick={() =>
+      <h1>Anecdote of the day</h1>
+      <Anecdote anecdote={anecdotes[selected]} votes={votes[selected]} />
+      <Button handleClick={() => vote(selected)} text="vote" />
+      <Button
+        handleClick={() =>
           setSelected(Math.floor(Math.random() * anecdotes.length))
         }
-      >
-        next anecdote
-      </button>
-      <div>has {votes[selected]} votes</div>
+        text="next anecdote"
+      />
+      <h2>Anecdote with the most votes</h2>
+      <Anecdote
+        anecdote={anecdotes[indexOfMaxValue]}
+        votes={votes[indexOfMaxValue]}
+      />
     </div>
   );
 };
