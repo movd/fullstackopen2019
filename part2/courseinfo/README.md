@@ -1,3 +1,3 @@
-# Answers for Exercises 2.1. to 2.x
+# Answers for Exercises 2.1 to 2.5
 
-My answers for Exercises 2.1. to 2.x of Full Stack Open 2019.
+My answers for Exercises 2.1 to 2.5 of Full Stack Open 2019.
