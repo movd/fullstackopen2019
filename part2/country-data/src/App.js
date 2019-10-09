@@ -3,7 +3,7 @@ import axios from "axios";
 import Search from "./Search";
 import Countries from "./Countries";
 
-function App() {
+const App = () => {
   const [allCountries, setAllCountries] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,6 +47,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;

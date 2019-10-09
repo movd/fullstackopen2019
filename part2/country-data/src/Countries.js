@@ -1,26 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
+import Country from "./Country";
 
 const Countries = ({ countries }) => {
-  const renderCountries = countries.map(c => <div key={c.name}>{c.name}</div>);
-  const renderSingleCountry = countries.map(c => (
+  const [showDetails, setShowDetails] = useState([]);
+
+  const toggleDetails = idx => {
+    let update = [...showDetails];
+    update[idx] = !update[idx];
+    setShowDetails(update);
+  };
+  console.log(showDetails);
+  const renderCountries = countries.map((c, idx) => (
     <div key={c.name}>
-      <h1>{c.name}</h1>
-      <div>capital {c.capital}</div>
-      <div>population {c.population}</div>
-      <h2>languages</h2>
-      <ul>
-        {c.languages.map(l => (
-          <li key={l.iso639_2}>{l.name}</li>
-        ))}
-      </ul>
-      <img src={c.flag} alt={`Flag of ${c.name}`} width="120" />
+      {c.name} <button onClick={() => toggleDetails(idx)}>show</button>
+      {showDetails[idx] && <Country country={c} />}
     </div>
   ));
 
   return (
     <div className="Countries">
       {countries.length === 1 ? (
-        <div>{renderSingleCountry}</div>
+        <Country country={countries[0]} />
       ) : (
         <div>{renderCountries}</div>
       )}
