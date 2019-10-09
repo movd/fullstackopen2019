@@ -24,9 +24,9 @@ const App = () => {
       setIsLoading(false);
     };
     getData();
-  }, [url]); // Only run when url changes
+  }, []); // Only run when url changes
 
-  const handleClick = e => {
+  const handleClick = async e => {
     e.preventDefault();
     const newPerson = {
       name: newName,
@@ -36,7 +36,12 @@ const App = () => {
     if (persons.some(p => p.name === newName)) {
       alert(`${newName} is already added to phonebook`);
     } else {
-      setPersons(persons.concat(newPerson));
+      try {
+        const response = await axios.post(url, newPerson);
+        setPersons(persons.concat(response.data));
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
