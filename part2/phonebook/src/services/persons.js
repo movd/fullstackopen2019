@@ -10,7 +10,7 @@ const getData = async () => {
   }
 };
 
-const create = async (newPerson) => {
+const createPerson = async newPerson => {
   try {
     const response = await axios.post(url, newPerson);
     return response.data;
@@ -19,7 +19,12 @@ const create = async (newPerson) => {
   }
 };
 
-export default {
-  getData: getData,
-  create: create
+const deleteId = async id => {
+  try {
+    await axios.delete(`${url}/${id}`);
+  } catch (error) {
+    console.error(error);
+  }
 };
+
+export default { getData, createPerson, deleteId };

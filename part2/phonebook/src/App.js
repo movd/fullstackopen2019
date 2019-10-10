@@ -16,13 +16,20 @@ const App = () => {
   const handleFilterChange = e => setNameFilter(e.target.value);
 
   useEffect(() => {
-    const getPersons = async () => {
-      setIsLoading(true);
-      setPersons(await personsService.getData());
-      setIsLoading(false);
-    };
     getPersons();
   }, []);
+
+  const getPersons = async () => {
+    setIsLoading(true);
+    setPersons(await personsService.getData());
+    setIsLoading(false);
+  };
+
+  const deletePerson = async ({ name, id }) => {
+    window.confirm(`Delete ${name} (${id})?`);
+    await personsService.deleteId(id);
+    getPersons();
+  };
 
   const handleClick = async e => {
     e.preventDefault();
@@ -35,7 +42,9 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
     } else {
       try {
-        setPersons(persons.concat(await personsService.create(newPerson)));
+        setPersons(
+          persons.concat(await personsService.createPerson(newPerson))
+        );
       } catch (error) {
         console.error(error);
       }
@@ -65,7 +74,7 @@ const App = () => {
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <Persons persons={filterPersons(persons)} />
+        <Persons persons={filterPersons(persons)} handleDelete={deletePerson} />
       )}
     </div>
   );
