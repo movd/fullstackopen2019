@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import personsService from "./services/persons";
+import personsService from "./services/persons.module";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+
+const { getData, createPerson, deleteId, updateId } = personsService;
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -21,13 +23,21 @@ const App = () => {
 
   const getPersons = async () => {
     setIsLoading(true);
-    setPersons(await personsService.getData());
+    setPersons(await getData());
     setIsLoading(false);
   };
 
   const deletePerson = async ({ name, id }) => {
-    window.confirm(`Delete ${name} (${id})?`);
-    await personsService.deleteId(id);
+    window.confirm(`Delete ${name}?`);
+    await deleteId(id);
+    getPersons();
+  };
+
+  const updatePerson = async (newPerson, id) => {
+    window.confirm(
+      `${newPerson.name} is already added to phonebook, replace the old number with a new one?`
+    );
+    await updateId(newPerson, id);
     getPersons();
   };
 
@@ -39,12 +49,11 @@ const App = () => {
     };
 
     if (persons.some(p => p.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+      let id = persons.find(p => p.name === newName).id;
+      updatePerson(newPerson, id);
     } else {
       try {
-        setPersons(
-          persons.concat(await personsService.createPerson(newPerson))
-        );
+        setPersons(persons.concat(await createPerson(newPerson)));
       } catch (error) {
         console.error(error);
       }
