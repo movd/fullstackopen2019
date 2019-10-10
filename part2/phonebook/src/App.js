@@ -3,6 +3,7 @@ import personsService from "./services/persons.module";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 const { getData, createPerson, deleteId, updateId } = personsService;
 
@@ -12,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [nameFilter, setNameFilter] = useState("");
+  const [notification, setNotification] = useState();
 
   const handleNameChange = e => setNewName(e.target.value);
   const handleNumberChange = e => setNewNumber(e.target.value);
@@ -38,6 +40,13 @@ const App = () => {
       `${newPerson.name} is already added to phonebook, replace the old number with a new one?`
     );
     await updateId(newPerson, id);
+    setNotification({
+      type: "success",
+      message: `Updated ${newPerson.name}`
+    });
+    setTimeout(() => {
+      setNotification(null);
+    }, 5000);
     getPersons();
   };
 
@@ -54,6 +63,13 @@ const App = () => {
     } else {
       try {
         setPersons(persons.concat(await createPerson(newPerson)));
+        setNotification({
+          type: "error",
+          message: `Added ${newPerson.name}`
+        });
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
       } catch (error) {
         console.error(error);
       }
@@ -69,6 +85,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      {notification ? (
+        <Notification notification={notification} />
+      ) : (
+        <div></div>
+      )}
       <Filter value={nameFilter} handleChange={handleFilterChange} />
 
       <h3>Add a new</h3>
