@@ -44,10 +44,14 @@ const App = () => {
       type: "success",
       message: `Updated ${newPerson.name}`
     });
+    getPersons();
+    clearNotification();
+  };
+
+  const clearNotification = () => {
     setTimeout(() => {
       setNotification(null);
     }, 5000);
-    getPersons();
   };
 
   const handleClick = async e => {
@@ -59,17 +63,24 @@ const App = () => {
 
     if (persons.some(p => p.name === newName)) {
       let id = persons.find(p => p.name === newName).id;
-      updatePerson(newPerson, id);
+      try {
+        await updatePerson(newPerson, id);
+      } catch (error) {
+        setNotification({
+          type: "error",
+          message: `Information of ${newPerson.name} has already been removed from server`
+        });
+        getPersons();
+        clearNotification();
+      }
     } else {
       try {
         setPersons(persons.concat(await createPerson(newPerson)));
         setNotification({
-          type: "error",
+          type: "success",
           message: `Added ${newPerson.name}`
         });
-        setTimeout(() => {
-          setNotification(null);
-        }, 5000);
+        clearNotification();
       } catch (error) {
         console.error(error);
       }
