@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = "http://localhost:3001/api/persons";
+const url = "https://glacial-cliffs-64027.herokuapp.com/api/persons";
 
 const getData = async () => {
   try {
