@@ -15,7 +15,7 @@ const createPerson = async newPerson => {
     const response = await axios.post(url, newPerson);
     return response.data;
   } catch (error) {
-    console.error(error);
+    return error.response.data;
   }
 };
 
@@ -28,7 +28,12 @@ const deleteId = async id => {
 };
 
 const updateId = async ({ name, number }, id) => {
-  return await axios.put(`${url}/${id}`, { name, number, id });
+  try {
+    const response = await axios.put(`${url}/${id}`, { name, number, id });
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
 };
 
 export default { getData, createPerson, deleteId, updateId };

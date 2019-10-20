@@ -39,13 +39,22 @@ const App = () => {
     window.confirm(
       `${newPerson.name} is already added to phonebook, replace the old number with a new one?`
     );
-    await updateId(newPerson, id);
-    setNotification({
-      type: "success",
-      message: `Updated ${newPerson.name}`
-    });
-    getPersons();
-    clearNotification();
+
+    const updatedPerson = await updateId(newPerson, id);
+    if (updatedPerson.error) {
+      setNotification({
+        type: "error",
+        message: updatedPerson.error
+      });
+      clearNotification();
+    } else {
+      setNotification({
+        type: "success",
+        message: `Updated ${newPerson.name}`
+      });
+      getPersons();
+      clearNotification();
+    }
   };
 
   const clearNotification = () => {
@@ -75,12 +84,22 @@ const App = () => {
       }
     } else {
       try {
-        setPersons(persons.concat(await createPerson(newPerson)));
-        setNotification({
-          type: "success",
-          message: `Added ${newPerson.name}`
-        });
-        clearNotification();
+        const createdPerson = await createPerson(newPerson);
+        if (createdPerson.error) {
+          console.log(createdPerson.error);
+          setNotification({
+            type: "error",
+            message: createdPerson.error
+          });
+          clearNotification();
+        } else {
+          setPersons(persons.concat(createdPerson));
+          setNotification({
+            type: "success",
+            message: `Added ${newPerson.name}`
+          });
+          clearNotification();
+        }
       } catch (error) {
         console.error(error);
       }
